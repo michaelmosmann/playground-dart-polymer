@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <link rel="import" href="packages/polymer/polymer.html">
+<link rel="import" href="packages/paper_elements/paper_slider.html">
+<link rel="import" href="packages/paper_elements/paper_button.html">
+<link rel="import" href="packages/paper_elements/paper_fab.html">
 
 <polymer-element name="comp-stopwatch">
   <template>
     <style>
       :host {
-        background-color: lime;
+        background-color: #fcfcf8;
         text-align: center;
         display: inline-block;
         border: solid 1px;
@@ -13,9 +16,11 @@
       }
     </style>
     <p>{{counter}}.</p>
-    <button on-click="{{start}}" id="startButton">Start</button>
-    <button on-click="{{stop}}" id="stopButton">Stop</button>
-    <button on-click="{{reset}}" id="resetButton">Reset</button>
+    <paper-button on-click="{{start}}" id="startButton" style="background-color: #9ade9a;" raisedButton label="Start"></paper-button>
+    <paper-button on-click="{{stop}}" id="stopButton" style="background-color: #dc6186;" raisedButton label="Stop"></paper-button>
+    <paper-button on-click="{{reset}}" id="resetButton" style="background-color: #617edc;" raisedButton label="Reset"></paper-button>
+    <p>Speed: {{data['inc']}}</p>
+    <paper-slider id="range" value="{{data['inc']}}"></paper-slider>
   </template>
   <script type="application/dart" src="comp-stopwatch.dart"></script>
 </polymer-element>

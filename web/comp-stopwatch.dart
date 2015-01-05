@@ -1,28 +1,43 @@
 import 'dart:html';
 import 'dart:async';
 import 'package:polymer/polymer.dart';
+import 'package:paper_elements/paper_slider.dart';
+import 'package:paper_elements/paper_button.dart';
+import 'package:paper_elements/paper_fab.dart';
 
 @CustomTag('comp-stopwatch')
 class CompStopWatch extends PolymerElement {
   @observable String counter = '00:00';
+  @observable Map<String, String> data=toObservable({
+    'inc':'1000'
+  });
   
   CompStopWatch.created() : super.created();
   
   Stopwatch mywatch = new Stopwatch();
   Timer mytimer;
   
-  ButtonElement stopButton;
-  ButtonElement startButton;
-  ButtonElement resetButton;
+  PaperButton stopButton;
+  PaperButton startButton;
+  PaperButton resetButton;
+  
+  PaperSlider rangeSlider;
     
   void attached() {
     super.attached();
     startButton = $['startButton'];
     stopButton = $['stopButton'];
     resetButton = $['resetButton'];
-        
+    
+    startButton.raisedButton=true;
+    
     stopButton.disabled = true;
     resetButton.disabled = true;
+    
+    rangeSlider = $['range'];
+    rangeSlider.min=10;
+    rangeSlider.max=1000;
+    rangeSlider.step=5;
   }
   
   @override
@@ -33,8 +48,8 @@ class CompStopWatch extends PolymerElement {
   
   void start(Event e, var detail, Node target) {
     mywatch.start();
-    var oneSecond = new Duration(seconds:1);
-    mytimer = new Timer.periodic(oneSecond, updateTime);
+    var duration = new Duration(seconds:1);
+    mytimer = new Timer.periodic(duration, updateTime);
     startButton.disabled = true;
     stopButton.disabled = false;
     resetButton.disabled = true;
