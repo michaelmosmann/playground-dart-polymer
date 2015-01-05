@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<link rel="import" href="packages/polymer/polymer.html">
+<link rel="import" href="packages/core_elements/core_toolbar.html">
+<link rel="import" href="packages/core_elements/core_icon_button.html">
+<link rel="import" href="packages/paper_elements/paper_button.html">
+<link rel="import" href="ed-text.html">
+
+<polymer-element name="ed-main">
+  <template>
+    <style>
+      :host {
+        background-color: #fcfcf8;
+      }
+    </style>
+    <core-toolbar>
+       <core-icon-button icon="menu" on-tap="{{menuAction}}"></core-icon-button>
+       <div flex>{{title}}</div>
+       <core-icon-button icon="more" on-tap="{{moreAction}}"></core-icon-button>
+     </core-toolbar>
+     <ed-text></ed-text>
+  </template>
+  <script type="application/dart" src="ed-main.dart"></script>
+</polymer-element>
