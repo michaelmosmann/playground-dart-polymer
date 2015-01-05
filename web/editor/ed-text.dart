@@ -27,8 +27,10 @@ class EditorText extends PolymerElement {
   }
   
   void edit(KeyboardEvent ke,var data, Node parent) {
-    String append=new String.fromCharCodes([ke.keyCode]);
-    text=text+":"+append;
+    if (KeyCode.isCharacterKey(ke.keyCode)) {
+      String append=new String.fromCharCodes([ke.keyCode]);
+      text=text+":"+append;
+    }
   }  
 
   void clicked(MouseEvent e) {
