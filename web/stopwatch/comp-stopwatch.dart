@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:polymer/polymer.dart';
 import 'package:paper_elements/paper_slider.dart';
 import 'package:paper_elements/paper_button.dart';
-import 'package:paper_elements/paper_fab.dart';
+//import 'package:paper_elements/paper_fab.dart';
 
 @CustomTag('comp-stopwatch')
 class CompStopWatch extends PolymerElement {
