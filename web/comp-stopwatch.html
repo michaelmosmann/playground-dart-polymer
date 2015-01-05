@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<link rel="import" href="packages/polymer/polymer.html">
+
+<polymer-element name="comp-stopwatch">
+  <template>
+    <style>
+      :host {
+        background-color: lime;
+        text-align: center;
+        display: inline-block;
+        border: solid 1px;
+        padding: 10px 10px 10px 10px;
+      }
+    </style>
+    <p>{{counter}}.</p>
+    <button on-click="{{start}}" id="startButton">Start</button>
+    <button on-click="{{stop}}" id="startButton">Stop</button>
+    <button on-click="{{reset}}" id="startButton">Reset</button>
+  </template>
+  <script type="application/dart" src="comp-stopwatch.dart"></script>
+</polymer-element>
