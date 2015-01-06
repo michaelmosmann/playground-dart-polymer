@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <link rel="import" href="packages/polymer/polymer.html">
 
-<polymer-element name="ed-headline" attributes="xtitle,level" noscript>
+<polymer-element name="ed-headline" attributes="xtitle,level">
   <template>
-    <template if="{{level < 1}}"><h1>???{{xtitle}}???</h1></template>
-    <template if="{{level == 1}}"><h1>{{xtitle}}</h1></template>
-    <template if="{{level == 2}}"><h2>{{xtitle}}</h2></template>
-    <template if="{{level == 3}}"><h3>{{xtitle}}</h3></template>
-    <template if="{{level == 4}}"><h4>{{xtitle}}</h4></template>
-    <template if="{{level == 5}}"><h5>{{xtitle}}</h5></template>
-    <template if="{{level == 6}}"><h6>{{xtitle}}</h6></template>
-    <template if="{{level > 6}}"><h6>???{{xtitle}}???</h6></template>
+    <template if="{{level < 1}}"><h1 id="h">???{{xtitle}}???</h1></template>
+    <template if="{{level == 1}}"><h1 id="h">{{xtitle}}</h1></template>
+    <template if="{{level == 2}}"><h2 id="h">{{xtitle}}</h2></template>
+    <template if="{{level == 3}}"><h3 id="h">{{xtitle}}</h3></template>
+    <template if="{{level == 4}}"><h4 id="h">{{xtitle}}</h4></template>
+    <template if="{{level == 5}}"><h5 id="h">{{xtitle}}</h5></template>
+    <template if="{{level == 6}}"><h6 id="h">{{xtitle}}</h6></template>
+    <template if="{{level > 6}}"><h6 id="h">???{{xtitle}}???</h6></template>
   </template>
 </polymer-element>
 
@@ -32,6 +32,18 @@
   </template>
 </polymer-element>
 
+<polymer-element name="ed-view" attributes="root,level">
+  <template>
+    <template if="{{ root.type == 'headline' }}">{{level}}:{{root.title}}</template>
+    <template if="{{ root.type == 'paragraph' }}">{{root.text}}</template>
+    <template repeat="{{node in root.nodes}}">
+      <div style="margin-left:10px;">
+        <ed-nodes root="{{node}}" level="{{level + 1}}"></ed-nodes>
+      </div>
+    </template>
+  </template>
+</polymer-element>
+
 <polymer-element name="ed-model">
   <template>
     <style>
@@ -45,6 +57,11 @@
     <template repeat="{{node in doc.nodes}}">
       <ed-nodes root="{{node}}" level="1"></ed-nodes>
     </template>
+    <div style="background-color: grey;">
+    <template repeat="{{node in doc.nodes}}">
+      <ed-view root="{{node}}" level="1"></ed-view>
+    </template>
+    </div>
   </template>
   <script type="application/dart" src="ed-model.dart"></script>
 </polymer-element>

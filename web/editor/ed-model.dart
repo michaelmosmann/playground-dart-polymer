@@ -51,12 +51,47 @@ class EdDoc extends Observable {
           )]);
 }
 
+
+
+
+
+
+
+@CustomTag('ed-headline')
+class EdHeadline extends PolymerElement {
+  @observable String xtitle;
+  @observable int level;
+  
+  EdHeadline.created() : super.created();
+  
+  HtmlElement headline;
+  void attached() {
+    headline=$["h"];
+    headline.contentEditable="true";
+    headline.onBlur.listen(updateData);
+  }
+  
+  void updateData(Event event) {
+    xtitle=headline.innerHtml;
+  }
+}
+
 @CustomTag('ed-nodes')
 class EdNodes extends PolymerElement {
   @observable EdNode root;
   @observable int level;
   
   EdNodes.created() : super.created() {
+    
+  }
+}
+
+@CustomTag('ed-view')
+class EdView extends PolymerElement {
+  @observable EdNode root;
+  @observable int level;
+  
+  EdView.created() : super.created() {
     
   }
 }
