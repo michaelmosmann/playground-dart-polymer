@@ -10,8 +10,79 @@ import 'package:core_elements/core_toolbar.dart';
 import 'ed-docs.dart';
 import 'ed-events.dart';
 
+abstract class EdEdit extends PolymerElement {
+  
+  String editorType;
+  String editableId;
+  
+  EdEdit.created(String editorType, String editableId) : super.created() {
+    this.editorType=editorType;
+    this.editableId=editableId;
+  }
+  
+  HtmlElement _editable;
+  
+  void attached() {
+    _editable=$[editableId];
+    
+    _editable.contentEditable="true";
+    //_para.onFocus.listen(active);
+    _editable.onBlur.listen((Event e) {
+      processInnerHtml(e, _editable.innerHtml);
+    });
+    _editable.onKeyDown.listen(keyEvents);
+    EditEvents.editEventOnFocus(editorType, _editable, this);
+    renderContent();
+  }
+  
+  void renderContent() {
+    _editable.innerHtml=formatedContent();
+  }
+  
+  String formatedContent();
+  
+  void processInnerHtml(Event e, String innerHtml);
+  
+  void keyEvents(KeyboardEvent event);
+  
+}
 
 @CustomTag('ed-paragraph')
+class EditParagraph extends EdEdit {
+  @published String xtext;
+
+  EditParagraph.created() : super.created("paragraph", "p");
+  
+
+  @override
+  void keyEvents(KeyboardEvent event) {
+    switch (event.keyCode) {
+      case KeyCode.ENTER:
+        if (event.shiftKey) {
+          event.preventDefault();
+          _editable.blur();
+        }
+        break;
+    }
+  }
+
+  @override
+  void processInnerHtml(Event e, String innerHtml) {
+    xtext=innerHtml.replaceAll("<br>", "\n");
+  }
+  
+  @override
+  String formatedContent() {
+    return xtext.replaceAll("\n", "<br>");
+  }
+  
+  void xtextChanged(String oldValue,String newValue) {
+    renderContent();
+  }
+}
+
+//@CustomTag('ed-paragraph')
+/*
 class EdEditParagraph extends PolymerElement {
   @published String xtext;
   
@@ -63,8 +134,40 @@ class EdEditParagraph extends PolymerElement {
     }
   }
 }
+*/
 
 @CustomTag('ed-headline')
+class EditHeadLine extends EdEdit {
+  @observable String xtitle;
+  @observable int level;
+  
+  EditHeadLine.created() : super.created("headline", "h");
+
+  
+  @override
+  String formatedContent() {
+    return xtitle;
+  }
+
+  @override
+  void keyEvents(KeyboardEvent event) {
+    switch (event.keyCode) {
+      case KeyCode.ENTER:
+        event.preventDefault();
+        //updateData(event);
+        _editable.blur();
+        // focus next..
+        break;
+    }
+  }
+
+  @override
+  void processInnerHtml(Event e, String innerHtml) {
+    xtitle=innerHtml;
+  }
+}
+
+/*
 class EdEditHeadLine extends PolymerElement {
   @observable String xtitle;
   @observable int level;
@@ -96,6 +199,7 @@ class EdEditHeadLine extends PolymerElement {
     }
   }
 }
+*/
 
 @CustomTag('ed-root')
 class EdRoot extends PolymerElement {
