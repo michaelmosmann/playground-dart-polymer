@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<link rel="import" href="packages/polymer/polymer.html">
+
+<polymer-element name="ed-p">
+  <template>
+    <p id="editable">Foo</p>
+  </template>
+</polymer-element>
+
+<polymer-element name="ed-doc">
+  <template>
+    <ed-p></ed-p>
+  </template>
+</polymer-element>
+
+<polymer-element name="ed-rich">
+  <template>
+    <style>
+      :host {
+        background-color: #f8f832;
+        border: 1px solid black;
+        display: inline-block;
+        padding: 10px 10px 10px 10px;
+      }
+    </style>
+    <div id="editor" on-click="{{clicked}}" >{{text}}</div>
+    <hr>
+    <ed-doc></ed-doc>
+  </template>
+  <script type="application/dart" src="ed-rich.dart"></script>
+</polymer-element>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<link rel="import" href="packages/polymer/polymer.html">
+
+<polymer-element name="ed-model">
+  <template>
+    <style>
+      :host {
+        background-color: #f88080;
+        display: block;
+        padding: 4px;
+      }
+    </style>
+    <div id="start" on-click="{{clicked}}" >{{doc.title}}</div>
+    <template repeat="{{node in doc.nodes}}">
+      <div>Node: {{node.type}}</div>
+      <template if="{{ node.type == 'headline' }}">Headline</template>
+      <template if="{{ node.type == 'p' }}">P</template>
+    </template>
+  </template>
+  <script type="application/dart" src="ed-model.dart"></script>
+</polymer-element>

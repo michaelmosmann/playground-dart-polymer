@@ -4,6 +4,8 @@
 <link rel="import" href="packages/core_elements/core_icon_button.html">
 <link rel="import" href="packages/paper_elements/paper_button.html">
 <link rel="import" href="ed-text.html">
+<link rel="import" href="ed-rich.html">
+<link rel="import" href="ed-model.html">
 
 <polymer-element name="ed-main">
   <template>
@@ -17,7 +19,8 @@
        <div flex>{{title}}</div>
        <core-icon-button icon="more" on-tap="{{moreAction}}"></core-icon-button>
      </core-toolbar>
-     <ed-text></ed-text>
+     <ed-rich></ed-rich>
+     <ed-model></ed-model>
   </template>
   <script type="application/dart" src="ed-main.dart"></script>
 </polymer-element>

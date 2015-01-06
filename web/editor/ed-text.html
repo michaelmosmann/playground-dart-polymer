@@ -8,9 +8,11 @@
     <style>
       :host {
         background-color: #f8f8f2;
+        padding: 4px;
       }
     </style>
     <div id="text" on-keydown="{{edit}}" on-click="{{clicked}}" tabindex="0">{{text}}</div>
+    <div id="test" contentEditable="true">Second</div>
   </template>
   <script type="application/dart" src="ed-text.dart"></script>
 </polymer-element>
