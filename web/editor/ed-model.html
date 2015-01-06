@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <link rel="import" href="packages/polymer/polymer.html">
 
+<polymer-element name="ed-nodes" attributes="root">
+  <template>
+    <template if="{{ root.type == 'headline' }}">{{root.title}}</template>
+    <template if="{{ root.type == 'paragraph' }}">{{root.text}}</template>
+    <ul>
+    <template repeat="{{node in root.nodes}}">
+      <li>
+        <ed-nodes root="{{node}}"></ed-nodes>
+      </li>
+    </template>
+    </ul>
+  </template>
+</polymer-element>
+
 <polymer-element name="ed-model">
   <template>
     <style>
@@ -12,9 +26,7 @@
     </style>
     <div id="start" on-click="{{clicked}}" >{{doc.title}}</div>
     <template repeat="{{node in doc.nodes}}">
-      <div>Node: {{node.type}}</div>
-      <template if="{{ node.type == 'headline' }}">Headline</template>
-      <template if="{{ node.type == 'p' }}">P</template>
+      <ed-nodes root="{{node}}"></ed-nodes>
     </template>
   </template>
   <script type="application/dart" src="ed-model.dart"></script>
