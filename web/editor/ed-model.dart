@@ -36,12 +36,25 @@ class EdParagraph extends EdNodeWithChilds {
 class EdDoc extends Observable {
   @observable String title="Title";
   
-  @observable List<EdNode> nodes=toObservable([new EdHeadLine()..title='Foo', new EdHeadLine()..title='Bar'..nodes.add(new EdParagraph())]);
+  @observable List<EdNode> nodes=toObservable([
+    new EdHeadLine()
+      ..title='Foo', 
+    new EdHeadLine()
+      ..title='Bar'
+      ..nodes.add(
+          new EdParagraph()
+          ..text='Some Text'
+          ..nodes.add(
+              new EdHeadLine()
+              ..title='Sub'
+              )
+          )]);
 }
 
 @CustomTag('ed-nodes')
 class EdNodes extends PolymerElement {
   @observable EdNode root;
+  @observable int level;
   
   EdNodes.created() : super.created() {
     
