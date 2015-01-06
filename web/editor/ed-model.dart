@@ -7,6 +7,8 @@ import 'package:paper_elements/paper_button.dart';
 //import 'package:paper_elements/paper_fab.dart';
 import 'package:core_elements/core_toolbar.dart';
 
+import 'ed-events.dart';
+
 abstract class EdNode extends Observable {
   @observable String type;
   
@@ -66,6 +68,8 @@ class EdEditParagraph extends PolymerElement {
   void attached() {
     _para=$["p"];
     _para.contentEditable="true";
+    EditEvents.editEventOnFocus("paragraph", _para, this);
+    //_para.onFocus.listen(active);
     _para.onBlur.listen(updateData);
     _para.onKeyDown.listen(keyEvents);
     updateText();
@@ -105,6 +109,13 @@ class EdEditParagraph extends PolymerElement {
     }
   }
 
+/*  
+  void active(Event event) {
+    print("active...");
+    fire("edit", detail: { "type":"paragraph"}, canBubble: true, cancelable: true);
+    //dispatchEvent(new CustomEvent("edit"));
+  }
+   */
 }
 
 @CustomTag('ed-headline')
@@ -120,6 +131,8 @@ class EdEditHeadLine extends PolymerElement {
     headline.contentEditable="true";
     headline.onBlur.listen(updateData);
     headline.onKeyDown.listen(keyEvents);
+    
+    EditEvents.editEventOnFocus("headline", headline, this);
   }
   
   void updateData(Event event) {

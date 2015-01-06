@@ -6,8 +6,9 @@
 <link rel="import" href="ed-text.html">
 <link rel="import" href="ed-rich.html">
 <link rel="import" href="ed-model.html">
+<link rel="import" href="ed-toolbar.html">
 
-<polymer-element name="ed-main">
+<polymer-element name="ed-main" on-edit="{{onEditEvent}}">
   <template>
     <style>
       :host {
@@ -21,6 +22,7 @@
      </core-toolbar>
      <ed-rich></ed-rich>
      <ed-model></ed-model>
+     <ed-toolbar id="toolbar"></ed-toolbar>
   </template>
   <script type="application/dart" src="ed-main.dart"></script>
 </polymer-element>
