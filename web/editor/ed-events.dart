@@ -1,3 +1,5 @@
+library ed_events;
+
 import 'dart:html';
 import 'dart:async';
 import 'package:polymer/polymer.dart';
