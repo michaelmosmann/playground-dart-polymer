@@ -69,10 +69,22 @@ class EdHeadline extends PolymerElement {
     headline=$["h"];
     headline.contentEditable="true";
     headline.onBlur.listen(updateData);
+    headline.onKeyDown.listen(keyEvents);
   }
   
   void updateData(Event event) {
     xtitle=headline.innerHtml;
+  }
+  
+  void keyEvents(KeyboardEvent event) {
+    switch (event.keyCode) {
+      case KeyCode.ENTER:
+        event.preventDefault();
+        //updateData(event);
+        headline.blur();
+        // focus next..
+        break;
+    }
   }
 }
 
