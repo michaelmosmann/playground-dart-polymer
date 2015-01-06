@@ -45,6 +45,18 @@ abstract class EdEdit extends PolymerElement {
   
   void keyEvents(KeyboardEvent event);
   
+  void focusNext() {
+    _editable.blur();
+    
+    print("ShadowRoot: "+this.shadowRoot.toString());
+    print("Parent: "+this.shadowRoot.parent.toString());
+    print("ParentNode: "+this.shadowRoot.parentNode.toString());
+    print("2.Parent: "+this.parent.toString());
+    print("2.ParentNode: "+this.parentNode.toString());
+    
+    print("Children: "+this.shadowRoot.children.toString());
+  }
+  
 }
 
 @CustomTag('ed-paragraph')
@@ -60,7 +72,8 @@ class EditParagraph extends EdEdit {
       case KeyCode.ENTER:
         if (event.shiftKey) {
           event.preventDefault();
-          _editable.blur();
+          //_editable.blur();
+          focusNext();
         }
         break;
     }
@@ -155,7 +168,8 @@ class EditHeadLine extends EdEdit {
       case KeyCode.ENTER:
         event.preventDefault();
         //updateData(event);
-        _editable.blur();
+        //_editable.blur();
+        focusNext();
         // focus next..
         break;
     }
