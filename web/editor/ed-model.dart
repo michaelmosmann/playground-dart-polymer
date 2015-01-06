@@ -43,7 +43,7 @@ class EdDoc extends Observable {
       ..title='Bar'
       ..nodes.add(
           new EdParagraph()
-          ..text='Some Text'
+          ..text='Some Text\nfoo'
           ..nodes.add(
               new EdHeadLine()
               ..title='Sub'
@@ -55,14 +55,64 @@ class EdDoc extends Observable {
 
 
 
+@CustomTag('ed-paragraph')
+class EdEditParagraph extends PolymerElement {
+  @published String xtext;
+  
+  EdEditParagraph.created() : super.created();
+  
+  HtmlElement _para;
+  
+  void attached() {
+    _para=$["p"];
+    _para.contentEditable="true";
+    _para.onBlur.listen(updateData);
+    _para.onKeyDown.listen(keyEvents);
+    updateText();
+  }
 
+  void updateText() {
+    _para.innerHtml=textAsHtml();
+  }
+  
+  String textAsHtml() {
+    return xtext.replaceAll("\n", "<br>");
+  }
+  
+  void xtextChanged(String oldValue,String newValue) {
+    updateText();
+    //print('xtext: ${oldValue} -> ${newValue}');
+    //print('stored: ${xtext}');
+    
+    //this.injectBoundHTML(xtext.replaceAll("\n", "<br>"), _para);
+    
+  }
+  
+  void updateData(Event event) {
+    xtext=_para.innerHtml.replaceAll("<br>", "\n");
+  }
+  
+  
+  
+  void keyEvents(KeyboardEvent event) {
+    switch (event.keyCode) {
+      case KeyCode.ENTER:
+        if (event.shiftKey) {
+          event.preventDefault();
+          _para.blur();
+        }
+        break;
+    }
+  }
+
+}
 
 @CustomTag('ed-headline')
-class EdHeadline extends PolymerElement {
+class EdEditHeadLine extends PolymerElement {
   @observable String xtitle;
   @observable int level;
   
-  EdHeadline.created() : super.created();
+  EdEditHeadLine.created() : super.created();
   
   HtmlElement headline;
   void attached() {
@@ -85,6 +135,16 @@ class EdHeadline extends PolymerElement {
         // focus next..
         break;
     }
+  }
+}
+
+@CustomTag('ed-root')
+class EdRoot extends PolymerElement {
+  @observable EdDoc root;
+  @published String mode;
+  
+  EdRoot.created() : super.created() {
+    
   }
 }
 

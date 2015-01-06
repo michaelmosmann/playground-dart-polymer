@@ -14,9 +14,9 @@
   </template>
 </polymer-element>
 
-<polymer-element name="ed-paragraph" attributes="xtext" noscript>
+<polymer-element name="ed-paragraph" attributes="xtext">
   <template>
-    <p>{{xtext}}</p>
+    <p id="p"></p>
   </template>
 </polymer-element>
 
@@ -34,11 +34,28 @@
 
 <polymer-element name="ed-view" attributes="root,level">
   <template>
-    <template if="{{ root.type == 'headline' }}">{{level}}:{{root.title}}</template>
-    <template if="{{ root.type == 'paragraph' }}">{{root.text}}</template>
+    <template if="{{ root.type == 'headline' }}">{{level}}:{{root.title}}<br/></template>
+    <template if="{{ root.type == 'paragraph' }}">{{root.text}}<br/></template>
     <template repeat="{{node in root.nodes}}">
-      <div style="margin-left:10px;">
-        <ed-nodes root="{{node}}" level="{{level + 1}}"></ed-nodes>
+      <div style="margin-left:10px; border:1px dotted black;">
+        <ed-view root="{{node}}" level="{{level + 1}}"></ed-view>
+      </div>
+    </template>
+  </template>
+</polymer-element>
+
+<polymer-element name="ed-root" attributes="root,mode">
+  <template>
+    <template if="{{mode=='edit'}}">
+      <template repeat="{{node in root.nodes}}">
+        <ed-nodes root="{{node}}" level="1"></ed-nodes>
+      </template>
+    </template>
+    <template if="{{mode!='edit'}}">
+      <div style="background-color: grey;">
+        <template repeat="{{node in root.nodes}}">
+          <ed-view root="{{node}}" level="1"></ed-view>
+        </template>
       </div>
     </template>
   </template>
@@ -54,14 +71,9 @@
       }
     </style>
     <div id="start" on-click="{{clicked}}" >{{doc.title}}</div>
-    <template repeat="{{node in doc.nodes}}">
-      <ed-nodes root="{{node}}" level="1"></ed-nodes>
-    </template>
-    <div style="background-color: grey;">
-    <template repeat="{{node in doc.nodes}}">
-      <ed-view root="{{node}}" level="1"></ed-view>
-    </template>
-    </div>
+    
+    <ed-root root="{{doc}}" mode="edit"></ed-root>
+    <ed-root root="{{doc}}"></ed-root>
   </template>
   <script type="application/dart" src="ed-model.dart"></script>
 </polymer-element>
