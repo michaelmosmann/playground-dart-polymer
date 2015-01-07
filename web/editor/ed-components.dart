@@ -12,43 +12,101 @@ abstract class PolymerElementWithParent {
   Optional<PolymerElement> parentElement();
 }
 
-class NodeVisitor extends Visitor {
+class _NodeVisitor extends Visitor {
+  
+  EdComponent componentParent;
+  
+  _NodeVisitor(this.componentParent);
   
   @override
-  Optional<Visitor> visit(PolymerElement parent, Node n) {
-    bool match=false;
-    if (n is PolymerElementWithParent) {
-      PolymerElementWithParent l=n as PolymerElementWithParent;
-      l.attachedTo(parent);
+  Optional<Visitor> visit(Element parent, Node n) {
+    if (n is EdComponent) {
+      EdComponent l=n;
+      l.attachedTo(componentParent);
       //print("Node: "+parent.toString()+"->"+n.toString()+" matched");
-      match=true;
+      return new Optional(new _NodeVisitor(l));
     }
-    if (n is PolymerElement) {
-      return new Optional(this);
+    if (n is Node) {
+      return new Optional(new _NodeVisitor(componentParent));
     }
-    if (!match) {
-      //print("Node: "+parent.toString()+"->"+n.toString()+" not matched");
+    //print("Missing: "+parent.toString()+"->"+n.toString()+" ?");
+    return new Optional(new _NodeVisitor(componentParent));
+  }
+}
+
+typedef void EdComponentVisitor(EdComponent component);
+
+class _EdComponentVisitorAdapter extends Visitor {
+  
+  EdComponentVisitor visitor;
+  
+  _EdComponentVisitorAdapter(this.visitor);
+  
+  @override
+  Optional<Visitor> visit(Element parent, Node n) {
+    bool match=false;
+    if (n is EdComponent) {
+      EdComponent l=n;
+      visitor(l);
+      return new Optional<Visitor>();
+      //l.visitChildren(visitor);
     }
-    return new Optional<Visitor>();
+    return new Optional<Visitor>(new _EdComponentVisitorAdapter(visitor));
   }
 }
 
 class EdComponent extends PolymerElement implements PolymerElementWithParent {
   
+  static int counter=0;
+  
   EdComponent.created() : super.created();
+  String id=(counter++).toString();
  
-  Optional<PolymerElement> _parent;
+  Optional<PolymerElement> _parent=new Optional();
   
   void attached() {
-    Visitors.visit(this, new NodeVisitor());
+    super.attached();
+    Optional<PolymerElement> guessedParent=_guessParent(this.parentNode);
+    if (guessedParent.isPresent) {
+      _parent=guessedParent;
+    }
+    print("attached: "+this.toString()+"("+this.runtimeType.toString()+") to parent: "+_parent.toString());
+    //Visitors.visit(this, new _NodeVisitor(this));
+  }
+  
+  static Optional<PolymerElement> _guessParent(Node parent) {
+    if (parent!=null) {
+      //print("try "+parent.runtimeType.toString());
+      if (parent is ShadowRoot) {
+        return _guessParent(parent.host);
+      }
+      if (parent is PolymerElement) {
+        return new Optional(parent);
+      }
+      if (parent is Element) {
+        if (parent.shadowRoot!=null) {
+          return _guessParent(parent.shadowRoot.host);
+        }
+        return _guessParent(parent.parentNode);
+      }
+    }
+    return new Optional();
   }
 
   @override
   void attachedTo(PolymerElement parent) {
     _parent=new Optional(parent);
-    print("parent: "+_parent.toString());
+    print("parent: "+_parent.toString()+" => "+this.toString());
   }
   
+  void visitChildren(EdComponentVisitor visitor) {
+    Visitors.visit(this, new _EdComponentVisitorAdapter(visitor));
+  }
+
+  String toString() {
+    return super.toString()+"#"+id;
+  }
+  /*
   Optional<EdComponent> nextComponent() {
     if (_parent.isPresent) {
       var parentElement = _parent.get();
@@ -72,6 +130,7 @@ class EdComponent extends PolymerElement implements PolymerElementWithParent {
     }
     return new Optional();
   }
+   */
 
   @override
   Optional<PolymerElement> parentElement() {

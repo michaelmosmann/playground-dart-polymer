@@ -57,12 +57,13 @@ abstract class EdEdit extends EdComponent {
   void focusNext() {
     _editable.blur();
     
-    Optional<EdComponent> next=nextComponent();
-    if (next.isPresent) {
-      if (next.get() is EdEdit) {
-        (next.get() as EdEdit).focusThis();
+    if (parentElement().isPresent) {
+      PolymerElement parent = parentElement().get();
+      if (parent is EdComponent) {
+        _focusNextAfter(parent, new Optional(this),false);
       }
     }
+    
     //print("ShadowRoot: "+this.shadowRoot.toString());
     //print("Parent: "+this.shadowRoot.parent.toString());
     //print("ParentNode: "+this.shadowRoot.parentNode.toString());
@@ -71,7 +72,71 @@ abstract class EdEdit extends EdComponent {
     
     //print("Children: "+this.shadowRoot.children.toString());
   }
+
+  static bool _focusFirstChild(EdComponent parent) {
+    print(label(parent)+"focus first");
+    bool focusFound=false;
+    parent.visitChildren((EdComponent e) {
+      if (!focusFound) {
+        if (e is EdEdit) {
+          print(label(parent,e)+"focus this");
+          e.focusThis();
+          focusFound=true;
+        } else {
+          print(label(parent,e)+"focus first child");
+          focusFound=_focusFirstChild(e);
+        }}
+    });
+    return focusFound;
+  }
   
+  static bool _focusNextAfter(EdComponent parent, Optional<EdComponent> current, bool up) {
+    bool foundThis=!current.isPresent;
+    bool focusFound=false;
+    
+    print(label(parent)+" with "+current.toString());
+    
+    parent.visitChildren((EdComponent e) {
+      if (!focusFound) {
+        print(label(parent,e)+"visit");
+        if (foundThis) {
+          if (e is EdEdit) {
+            print(label(parent,e)+"focus this");
+            e.focusThis();
+            focusFound=true;
+          } else {
+            print(label(parent,e)+"focus first child after thi");
+            focusFound=_focusFirstChild(e);
+          }
+        }
+        if (current.isPresent && identical(e,current.get())) {
+          print(label(parent,e)+"found this");
+          foundThis=true;
+          if (!up) {
+            print(label(parent,e)+"focus first child of this");
+            focusFound=_focusFirstChild(e);
+          }
+        }
+      }
+    });
+    
+    if (!focusFound) {
+      Optional<PolymerElement> parentOfParent = parent.parentElement();
+      if ((parentOfParent.isPresent) && (parentOfParent.get() is EdComponent)) {
+        print(label(parent)+"focus first child of parent.parent");
+        focusFound=_focusNextAfter(parentOfParent.get(),new Optional(parent),true);
+      }
+    }
+    
+    return focusFound;
+  }
+  
+  static String label(EdComponent parent, [EdComponent e]) {
+    if (e!=null) {
+      return "Search["+parent.toString()+"=>"+e.toString()+"]:";
+    }
+    return "Search["+parent.toString()+"]:";
+  }
 }
 
 @CustomTag('ed-paragraph')
@@ -235,9 +300,7 @@ class EdRoot extends EdComponent {
   @observable EdDoc root;
   @published String mode;
   
-  EdRoot.created() : super.created() {
-    
-  }
+  EdRoot.created() : super.created();
 }
 
 @CustomTag('ed-nodes')
@@ -245,9 +308,7 @@ class EdNodes extends EdComponent {
   @observable EdNode root;
   @observable int level;
   
-  EdNodes.created() : super.created() {
-    
-  }
+  EdNodes.created() : super.created();
 }
 
 @CustomTag('ed-view')
@@ -255,9 +316,7 @@ class EdView extends PolymerElement {
   @observable EdNode root;
   @observable int level;
   
-  EdView.created() : super.created() {
-    
-  }
+  EdView.created() : super.created();
 }
 
 @CustomTag('ed-model')

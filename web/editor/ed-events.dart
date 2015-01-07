@@ -15,9 +15,9 @@ class EditEvents {
     });
   }
   
-  static void toChildren(PolymerElement parent, Event event, var detail) {
+  static void toChildren(Element parent, Event event, var detail) {
     //parent.childNodes.forEach(printNode);
-    Visitors.visitAll(parent, (PolymerElement parent, Node node) {
+    Visitors.visitAll(parent, (Element parent, Node node) {
       if (node is EditEventListener) {
         EditEventListener l=node as EditEventListener;
         l.onEditEvents(event, detail);
