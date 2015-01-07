@@ -9,8 +9,10 @@ import 'package:core_elements/core_toolbar.dart';
 
 import 'ed-docs.dart';
 import 'ed-events.dart';
+import 'ed-components.dart';
+import 'optionals.dart';
 
-abstract class EdEdit extends PolymerElement {
+abstract class EdEdit extends EdComponent {
   
   String editorType;
   String editableId;
@@ -45,16 +47,27 @@ abstract class EdEdit extends PolymerElement {
   
   void keyEvents(KeyboardEvent event);
   
+  void focusThis() {
+    print("focusThis: "+this.toString());
+    _editable.focus();
+  }
+  
   void focusNext() {
     _editable.blur();
     
-    print("ShadowRoot: "+this.shadowRoot.toString());
-    print("Parent: "+this.shadowRoot.parent.toString());
-    print("ParentNode: "+this.shadowRoot.parentNode.toString());
-    print("2.Parent: "+this.parent.toString());
-    print("2.ParentNode: "+this.parentNode.toString());
+    Optional<EdComponent> next=nextComponent();
+    if (next.isPresent) {
+      if (next.get() is EdEdit) {
+        (next.get() as EdEdit).focusThis();
+      }
+    }
+    //print("ShadowRoot: "+this.shadowRoot.toString());
+    //print("Parent: "+this.shadowRoot.parent.toString());
+    //print("ParentNode: "+this.shadowRoot.parentNode.toString());
+    //print("2.Parent: "+this.parent.toString());
+    //print("2.ParentNode: "+this.parentNode.toString());
     
-    print("Children: "+this.shadowRoot.children.toString());
+    //print("Children: "+this.shadowRoot.children.toString());
   }
   
 }

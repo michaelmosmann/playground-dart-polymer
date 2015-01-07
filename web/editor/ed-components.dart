@@ -16,7 +16,7 @@ class NodeVisitor extends Visitor {
   @override
   Optional<Visitor> visit(PolymerElement parent, Node n) {
     if (n is ParentPolymerListener) {
-      ParentPolymerListener l=n;
+      ParentPolymerListener l=n as ParentPolymerListener;
       l.attachedTo(parent);
     }
     return new Optional<Visitor>();
@@ -37,5 +37,9 @@ class EdComponent extends PolymerElement implements ParentPolymerListener {
   void attachedTo(PolymerElement parent) {
     _parent=parent;
     print("parent: "+_parent.toString());
+  }
+  
+  Optional<EdComponent> nextComponent() {
+    return new Optional();
   }
 }
