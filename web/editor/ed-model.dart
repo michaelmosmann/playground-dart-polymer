@@ -13,7 +13,11 @@ import 'treecomponent.dart';
 import 'optionals.dart';
 import 'ed-types.dart';
 
-abstract class EdEdit extends TreeComponent implements TreeEditor {
+abstract class _TreeDataContainer<T> {
+  T data();
+}
+
+abstract class EdEdit extends TreeComponent implements TreeEditor,EditEventListener {
   
   String editorType;
   String editableId;
@@ -58,6 +62,17 @@ abstract class EdEdit extends TreeComponent implements TreeEditor {
   
   void keyEvents(KeyboardEvent event);
   
+  @override
+  void onEditEvents(Event e, var detail) {
+    if ((detail['type']==editorType) && (identical(detail['source'],this))) {
+      print("got..."+e.toString()+":"+detail.toString());
+      onEditAction(detail['action']);
+    }
+  }
+  
+  void onEditAction(String action) {
+  }
+  
   void focusThis() {
     print("focusThis: "+this.toString());
     _editable.focus();
@@ -69,14 +84,6 @@ abstract class EdEdit extends TreeComponent implements TreeEditor {
     if (parentElement().isPresent) {
       _focusNextAfter(parentElement().get(), new Optional(this),false);
     }
-    
-    //print("ShadowRoot: "+this.shadowRoot.toString());
-    //print("Parent: "+this.shadowRoot.parent.toString());
-    //print("ParentNode: "+this.shadowRoot.parentNode.toString());
-    //print("2.Parent: "+this.parent.toString());
-    //print("2.ParentNode: "+this.parentNode.toString());
-    
-    //print("Children: "+this.shadowRoot.children.toString());
   }
 
   static bool _focusFirstChild(TreeComponent parent) {
@@ -147,6 +154,7 @@ abstract class EdEdit extends TreeComponent implements TreeEditor {
 
 @CustomTag('ed-paragraph')
 class EditParagraph extends EdEdit {
+  @observable EdNode doc;
   @published String xtext;
 
   EditParagraph.created() : super.created("paragraph", "p");
@@ -237,6 +245,7 @@ class EdEditParagraph extends PolymerElement {
 
 @CustomTag('ed-headline')
 class EditHeadLine extends EdEdit {
+  @observable EdNode doc;
   @observable String xtitle;
   @observable int level;
   
@@ -264,6 +273,26 @@ class EditHeadLine extends EdEdit {
   @override
   void processInnerHtml(Event e, String innerHtml) {
     xtitle=innerHtml;
+  }
+  
+  void onEditAction(String action) {
+    print("Action: "+action+" on "+this.toString());
+    
+    var currentParent = parentElement().get();
+    if (currentParent is _TreeDataContainer) {
+      print("Action on parent: "+currentParent.toString()+" with "+doc.toString());
+      var data=currentParent.data();
+      if (data is EdNodeWithChilds) {
+        EdNodeWithChilds node=data;
+        int idx=node.nodes.indexOf(doc);
+        if (idx==-1) {
+          //node.nodes.add(new EdHeadLine()..title='neu');
+        } else {
+          //node.nodes.insert(idx+1, new EdHeadLine()..title='neu');
+        }
+      }
+    }
+    //parentElement()
   }
 }
 
@@ -302,19 +331,30 @@ class EdEditHeadLine extends PolymerElement {
 */
 
 @CustomTag('ed-root')
-class EdRoot extends TreeComponent {
+class EdRoot extends TreeComponent implements _TreeDataContainer<EdDoc> {
   @observable EdDoc root;
   @published String mode;
   
   EdRoot.created() : super.created();
+
+  @override
+  EdDoc data() {
+    return root;
+  }
 }
 
 @CustomTag('ed-nodes')
-class EdNodes extends TreeComponent {
+class EdNodes extends TreeComponent implements _TreeDataContainer<EdNode> {
   @observable EdNode root;
   @observable int level;
   
   EdNodes.created() : super.created();
+  
+  @override
+  EdNode data() {
+    return root;
+  }
+
 }
 
 @CustomTag('ed-view')
@@ -326,12 +366,17 @@ class EdView extends PolymerElement {
 }
 
 @CustomTag('ed-model')
-class EdModel extends TreeComponent {
+class EdModel extends TreeComponent implements _TreeDataContainer<EdDoc> {
   @observable EdDoc doc=new EdDoc();
   
   EdModel.created() : super.created();
   
   void clicked(MouseEvent e, var data, Node parent) {
     doc.title="Clicked";
+  }
+  
+  @override
+  EdDoc data() {
+    return doc;
   }
 }

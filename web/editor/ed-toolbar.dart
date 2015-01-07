@@ -9,9 +9,24 @@ import 'package:core_elements/core_toolbar.dart';
 
 import 'ed-events.dart';
 import 'ed-types.dart';
+import 'optionals.dart';
+import 'treecomponent.dart';
+
+@CustomTag('ed-toolbar-headline')
+class EdToolbarHeadline extends TreeComponent {
+  
+  EdToolbarHeadline.created() : super.created();
+  
+  void newHeadline(Event e, var detail, Node target) {
+    print("------------->new headline:");
+    TreeEditor source=(parentElement().get() as EdToolbar).lastSource().get();
+    fire("edit", detail: {"type" : "headline", "action": "new","source": source});
+
+  }
+}
 
 @CustomTag('ed-toolbar')
-class EdToolbar extends PolymerElement implements EditEventListener {
+class EdToolbar extends TreeComponent implements EditEventListener {
   @published bool hideA=true;
   @published bool hideB=false;
   
@@ -19,6 +34,12 @@ class EdToolbar extends PolymerElement implements EditEventListener {
   @published bool paragraph=false;
   
   EdToolbar.created() : super.created();
+  Optional<TreeEditor> _lastSource=new Optional();
+  
+  
+  Optional<TreeEditor> lastSource() {
+    return _lastSource;
+  }
   
   @override
   void onEditEvents(Event e, var detail) {
@@ -27,11 +48,12 @@ class EdToolbar extends PolymerElement implements EditEventListener {
     String action=detail['action'];
     TreeEditor source=detail['source'] as TreeEditor;
     
-    paragraph=false;
-    headline=false;
     
     switch (action) {
       case 'focus':
+        paragraph=false;
+        headline=false;
+        _lastSource=new Optional(source);    
         switch (type) {
           case 'headline':
             headline=true;

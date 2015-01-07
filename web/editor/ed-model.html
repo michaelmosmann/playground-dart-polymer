@@ -22,8 +22,8 @@
 
 <polymer-element name="ed-nodes" attributes="root,level">
   <template>
-    <template if="{{ root.type == 'headline' }}"><ed-headline xtitle="{{root.title}}" level={{level}}></ed-headline></template>
-    <template if="{{ root.type == 'paragraph' }}"><ed-paragraph xtext="{{root.text}}"></ed-paragraph></template>
+    <template if="{{ root.type == 'headline' }}"><ed-headline doc="{{root}}" xtitle="{{root.title}}" level={{level}}></ed-headline></template>
+    <template if="{{ root.type == 'paragraph' }}"><ed-paragraph doc="{{root}}" xtext="{{root.text}}"></ed-paragraph></template>
     <template repeat="{{node in root.nodes}}">
       <div style="margin-left:10px;">
         <ed-nodes root="{{node}}" level="{{level + 1}}"></ed-nodes>

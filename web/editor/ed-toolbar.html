@@ -2,6 +2,13 @@
 <link rel="import" href="packages/polymer/polymer.html">
 <link rel="import" href="packages/core_elements/core_toolbar.html">
 <link rel="import" href="packages/core_elements/core_icon_button.html">
+<link rel="import" href="packages/paper_elements/paper_button.html">
+
+<polymer-element name="ed-toolbar-headline">
+  <template>
+    <paper-button on-click="{{newHeadline}}" style="background-color: #9ade9a;" raisedButton>+Headline</paper-button>
+  </template>
+</polymer-element>
 
 <polymer-element name="ed-toolbar">
   <template>
@@ -12,10 +19,12 @@
         padding: 4px;
       }
     </style>
-    <div hidden?={{hideA}} on-edit="{{onEditEvent}}">A</div>
-    <div hidden?={{hideB}} on-edit="{{onEditEvent}}">B</div>
-    <div hidden?={{!headline}} on-edit="{{onEditEvent}}">Headline</div>
-    <div hidden?={{!paragraph}} on-edit="{{onEditEvent}}">Paragraph</div>
+    <div hidden?={{hideA}}>A</div>
+    <div hidden?={{hideB}}>B</div>
+    <div hidden?={{!headline}}>
+      <ed-toolbar-headline></ed-toolbar-headline>
+    </div>
+    <div hidden?={{!paragraph}}>Paragraph</div>
   </template>
   <script type="application/dart" src="ed-toolbar.dart"></script>
 </polymer-element>
