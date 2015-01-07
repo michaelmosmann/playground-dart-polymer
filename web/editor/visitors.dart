@@ -12,48 +12,16 @@ abstract class Visitor {
   Optional<Visitor> visit(Element parent, Node n);
 }
 
-class NodeVisitorAsVisitor extends Visitor {
+class _NodeVisitorAsVisitor extends Visitor {
 
   NodeVisitor visitor;
   
-  NodeVisitorAsVisitor(this.visitor);
+  _NodeVisitorAsVisitor(this.visitor);
   
   @override
   Optional<Visitor> visit(Element parent, Node n) {
     visitor(parent,n);
     return new Optional(this);
-  }
-}
-
-/*
-abstract class Collector<T> {
-  Optional<T> collect(PolymerElement parent, Node n);
-}
-*/
-
-typedef Optional<T> Collector<T>(Element parent, Node n);
-
-typedef List<T> CollectFunc<T>(Element parent, Collector<T> collector);
-
-class CollectingVisitor<T> extends Visitor {
-  
-  Collector<T> collector;
-  CollectingVisitor(this.collector);
-  List<T> collection=[];
-  
-  @override
-  Optional<Visitor> visit(Element parent, Node n) {
-    Optional<T> result = collector(parent, n);
-    if (result.isPresent) {
-      collection.add(result.get());
-    }
-    return new Optional();
-  }
-  
-  static List<dynamic> collect(Element parent, Collector<dynamic> collector) {
-    CollectingVisitor<dynamic> visitor = new CollectingVisitor(collector);
-    Visitors.visit(parent, visitor);
-    return visitor.collection;
   }
 }
 
@@ -112,7 +80,7 @@ abstract class Visitors {
   }
   
   static void visitAll(Element parent, NodeVisitor visitor) {
-    visit(parent, new NodeVisitorAsVisitor(visitor));
+    visit(parent, new _NodeVisitorAsVisitor(visitor));
   }
   
 }

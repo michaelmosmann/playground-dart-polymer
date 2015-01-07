@@ -9,10 +9,10 @@ import 'package:core_elements/core_toolbar.dart';
 
 import 'ed-docs.dart';
 import 'ed-events.dart';
-import 'ed-components.dart';
+import 'treecomponent.dart';
 import 'optionals.dart';
 
-abstract class EdEdit extends EdComponent {
+abstract class EdEdit extends TreeComponent {
   
   String editorType;
   String editableId;
@@ -58,10 +58,7 @@ abstract class EdEdit extends EdComponent {
     _editable.blur();
     
     if (parentElement().isPresent) {
-      PolymerElement parent = parentElement().get();
-      if (parent is EdComponent) {
-        _focusNextAfter(parent, new Optional(this),false);
-      }
+      _focusNextAfter(parentElement().get(), new Optional(this),false);
     }
     
     //print("ShadowRoot: "+this.shadowRoot.toString());
@@ -73,10 +70,10 @@ abstract class EdEdit extends EdComponent {
     //print("Children: "+this.shadowRoot.children.toString());
   }
 
-  static bool _focusFirstChild(EdComponent parent) {
+  static bool _focusFirstChild(TreeComponent parent) {
     print(label(parent)+"focus first");
     bool focusFound=false;
-    parent.visitChildren((EdComponent e) {
+    parent.visitChildren((TreeComponent e) {
       if (!focusFound) {
         if (e is EdEdit) {
           print(label(parent,e)+"focus this");
@@ -90,13 +87,13 @@ abstract class EdEdit extends EdComponent {
     return focusFound;
   }
   
-  static bool _focusNextAfter(EdComponent parent, Optional<EdComponent> current, bool up) {
+  static bool _focusNextAfter(TreeComponent parent, Optional<TreeComponent> current, bool up) {
     bool foundThis=!current.isPresent;
     bool focusFound=false;
     
     print(label(parent)+" with "+current.toString());
     
-    parent.visitChildren((EdComponent e) {
+    parent.visitChildren((TreeComponent e) {
       if (!focusFound) {
         print(label(parent,e)+"visit");
         if (foundThis) {
@@ -121,8 +118,8 @@ abstract class EdEdit extends EdComponent {
     });
     
     if (!focusFound) {
-      Optional<PolymerElement> parentOfParent = parent.parentElement();
-      if ((parentOfParent.isPresent) && (parentOfParent.get() is EdComponent)) {
+      Optional<TreeComponent> parentOfParent = parent.parentElement();
+      if ((parentOfParent.isPresent) && (parentOfParent.get() is TreeComponent)) {
         print(label(parent)+"focus first child of parent.parent");
         focusFound=_focusNextAfter(parentOfParent.get(),new Optional(parent),true);
       }
@@ -131,7 +128,7 @@ abstract class EdEdit extends EdComponent {
     return focusFound;
   }
   
-  static String label(EdComponent parent, [EdComponent e]) {
+  static String label(TreeComponent parent, [TreeComponent e]) {
     if (e!=null) {
       return "Search["+parent.toString()+"=>"+e.toString()+"]:";
     }
@@ -296,7 +293,7 @@ class EdEditHeadLine extends PolymerElement {
 */
 
 @CustomTag('ed-root')
-class EdRoot extends EdComponent {
+class EdRoot extends TreeComponent {
   @observable EdDoc root;
   @published String mode;
   
@@ -304,7 +301,7 @@ class EdRoot extends EdComponent {
 }
 
 @CustomTag('ed-nodes')
-class EdNodes extends EdComponent {
+class EdNodes extends TreeComponent {
   @observable EdNode root;
   @observable int level;
   
@@ -320,7 +317,7 @@ class EdView extends PolymerElement {
 }
 
 @CustomTag('ed-model')
-class EdModel extends EdComponent {
+class EdModel extends TreeComponent {
   @observable EdDoc doc=new EdDoc();
   
   EdModel.created() : super.created();
