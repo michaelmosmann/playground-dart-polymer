@@ -29,6 +29,10 @@ class Some<T> implements Optional<T> {
   T get() {
     return value;
   }
+  
+  String toString() {
+    return "Some("+value.toString()+")";
+  }
 }
 
 class None<T> implements Optional<T>{
@@ -38,7 +42,6 @@ class None<T> implements Optional<T>{
     return false;
   }
   
-
   @override
   T get() {
     throw new ArgumentError("value must not be null");

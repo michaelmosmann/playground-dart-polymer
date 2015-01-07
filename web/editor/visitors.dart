@@ -8,16 +8,6 @@ import 'optionals.dart';
 
 typedef NodeVisitor(PolymerElement parent, Node n);
 
-/*
-typedef NodeVisitor(Context context, PolymerElement parent, Node node);
-
-class Context {
-  void childsWith(NodeVisitor visitor) {
-    
-  }
-}
-*/
-
 abstract class Visitor {
   Optional<Visitor> visit(PolymerElement parent, Node n);
 }
@@ -35,6 +25,38 @@ class NodeVisitorAsVisitor extends Visitor {
   }
 }
 
+/*
+abstract class Collector<T> {
+  Optional<T> collect(PolymerElement parent, Node n);
+}
+*/
+
+typedef Optional<T> Collector<T>(PolymerElement parent, Node n);
+
+typedef List<T> CollectFunc<T>(PolymerElement parent, Collector<T> collector);
+
+class CollectingVisitor<T> extends Visitor {
+  
+  Collector<T> collector;
+  CollectingVisitor(this.collector);
+  List<T> collection=[];
+  
+  @override
+  Optional<Visitor> visit(PolymerElement parent, Node n) {
+    Optional<T> result = collector(parent, n);
+    if (result.isPresent) {
+      collection.add(result.get());
+    }
+    return new Optional();
+  }
+  
+  static List<dynamic> collect(PolymerElement parent, Collector<dynamic> collector) {
+    CollectingVisitor<dynamic> visitor = new CollectingVisitor(collector);
+    Visitors.visit(parent, visitor);
+    return visitor.collection;
+  }
+}
+
 abstract class Visitors {
   
   static void visit(PolymerElement parent, Visitor visitor) {
@@ -46,6 +68,7 @@ abstract class Visitors {
           PolymerElement pe=e as PolymerElement;
           visit(pe, next.get());
         }
+      } else {
       }
     });
   }
@@ -55,3 +78,4 @@ abstract class Visitors {
   }
   
 }
+

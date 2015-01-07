@@ -24,7 +24,9 @@ abstract class EdEdit extends EdComponent {
   
   HtmlElement _editable;
   
+  @override
   void attached() {
+    super.attached();
     _editable=$[editableId];
     
     _editable.contentEditable="true";
@@ -229,7 +231,7 @@ class EdEditHeadLine extends PolymerElement {
 */
 
 @CustomTag('ed-root')
-class EdRoot extends PolymerElement {
+class EdRoot extends EdComponent {
   @observable EdDoc root;
   @published String mode;
   
@@ -239,7 +241,7 @@ class EdRoot extends PolymerElement {
 }
 
 @CustomTag('ed-nodes')
-class EdNodes extends PolymerElement {
+class EdNodes extends EdComponent {
   @observable EdNode root;
   @observable int level;
   
@@ -259,7 +261,7 @@ class EdView extends PolymerElement {
 }
 
 @CustomTag('ed-model')
-class EdModel extends PolymerElement {
+class EdModel extends EdComponent {
   @observable EdDoc doc=new EdDoc();
   
   EdModel.created() : super.created();
