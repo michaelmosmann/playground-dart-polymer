@@ -78,7 +78,7 @@ class _ForEachVisitor {
         }
       }
     } else {
-      print("skip: "+e.toString()+"("+e.runtimeType.toString()+")");
+      //print("skip: "+e.toString()+"("+e.runtimeType.toString()+")");
     }
   }
 }
@@ -87,7 +87,7 @@ abstract class Visitors {
   
   static void _visitNode(Node node, Visitor visitor) {
     node.nodes.forEach((n) {
-      print("Node: "+n.toString());
+      print("--------------------------->Node: "+n.toString());
       if (node is Element) {
         visit(node,visitor);
       } else {
@@ -108,25 +108,6 @@ abstract class Visitors {
     var shadowRoot = parent.shadowRoot;
     if ((shadowRoot!=null) && (shadowRoot.nodes!=null)) {
       shadowRoot.nodes.forEach(new _ForEachVisitor(parent, visitor));
-
-      /*
-      shadowRoot.children.forEach((e) {
-        var next = visitor.visit(parent, e);
-            if (next.isPresent) {
-              if (e is Element) {
-                Element pe=e as Element;
-                visit(pe, next.get());
-              } else {
-                if (e is HtmlElement) {
-                  _visitNode(e, next.get());
-                }
-              }
-            } else {
-              
-            }
-      });
-      * 
-       */
     }
   }
   
