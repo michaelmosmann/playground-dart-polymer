@@ -11,8 +11,9 @@ import 'ed-docs.dart';
 import 'ed-events.dart';
 import 'treecomponent.dart';
 import 'optionals.dart';
+import 'ed-types.dart';
 
-abstract class EdEdit extends TreeComponent {
+abstract class EdEdit extends TreeComponent implements TreeEditor {
   
   String editorType;
   String editableId;
@@ -35,8 +36,16 @@ abstract class EdEdit extends TreeComponent {
       processInnerHtml(e, _editable.innerHtml);
     });
     _editable.onKeyDown.listen(keyEvents);
-    EditEvents.editEventOnFocus(editorType, _editable, this);
+    EditEvents.focusEvents(_editable, this);
     renderContent();
+  }
+  
+  void editorFocused() {
+    fire("edit", detail: {"type" : editorType, "action": "focus", "source" : this});
+  }
+  
+  void editorBlured() {
+    fire("edit", detail: {"type" : editorType, "action": "blur", "source" : this});
   }
   
   void renderContent() {

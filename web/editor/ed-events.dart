@@ -5,13 +5,18 @@ import 'dart:async';
 import 'package:polymer/polymer.dart';
 
 import 'visitors.dart';
+import 'ed-types.dart';
 
 class EditEvents {
-  static void editEventOnFocus(String type, HtmlElement element, PolymerElement sender) {
+  static void focusEvents(HtmlElement element, TreeEditor source) {
     //element.onFocus.listen(new EditEventWrapper(type, sender).action);
     element.onFocus.listen((Event e) {
       print("..activate");
-      sender.fire("edit",detail: {"type":type});
+      source.editorFocused();
+    });
+    element.onBlur.listen((Event e) {
+      print("..deactivate");
+      source.editorBlured();
     });
   }
   

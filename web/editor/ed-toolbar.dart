@@ -8,6 +8,7 @@ import 'package:paper_elements/paper_button.dart';
 import 'package:core_elements/core_toolbar.dart';
 
 import 'ed-events.dart';
+import 'ed-types.dart';
 
 @CustomTag('ed-toolbar')
 class EdToolbar extends PolymerElement implements EditEventListener {
@@ -21,17 +22,26 @@ class EdToolbar extends PolymerElement implements EditEventListener {
   
   @override
   void onEditEvents(Event e, var detail) {
-    print("got: "+detail.toString());
+    print("got: "+e.type+":"+detail.toString());
     String type=detail['type'];
+    String action=detail['action'];
+    TreeEditor source=detail['source'] as TreeEditor;
     
     paragraph=false;
     headline=false;
-    switch (type) {
-      case 'headline':
-        headline=true;
+    
+    switch (action) {
+      case 'focus':
+        switch (type) {
+          case 'headline':
+            headline=true;
+            break;
+          case 'paragraph':
+            paragraph=true;
+            break;
+        }
         break;
-      case 'paragraph':
-        paragraph=true;
+      case 'blur':
         break;
     }
     
