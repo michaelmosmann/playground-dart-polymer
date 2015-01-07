@@ -4,10 +4,23 @@ import 'dart:html';
 import 'dart:async';
 import 'package:polymer/polymer.dart';
 
-import 'ed-visitors.dart';
+import 'visitors.dart';
+import 'optionals.dart';
 
 abstract class ParentPolymerListener {
   void attachedTo(PolymerElement parent);
+}
+
+class NodeVisitor extends Visitor {
+  
+  @override
+  Optional<Visitor> visit(PolymerElement parent, Node n) {
+    if (n is ParentPolymerListener) {
+      ParentPolymerListener l=n;
+      l.attachedTo(parent);
+    }
+    return new Optional<Visitor>();
+  }
 }
 
 class EdComponent extends PolymerElement implements ParentPolymerListener {
@@ -17,12 +30,7 @@ class EdComponent extends PolymerElement implements ParentPolymerListener {
   PolymerElement _parent;
   
   void attached() {
-    Visitors.visit(this, (PolymerElement parent, Node n) {
-      if (n is ParentPolymerListener) {
-        ParentPolymerListener l=n;
-        l.attachedTo(parent);
-      }
-    });
+    Visitors.visit(this, new NodeVisitor());
   }
 
   @override

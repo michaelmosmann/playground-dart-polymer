@@ -2,7 +2,7 @@ import 'package:unittest/unittest.dart';
 import '../../web/editor/optionals.dart';
 
 void main() {
-  group("optionals", () {
+  group("optionals:", () {
     test("optional of null should fail if get is called", () {
       expect(new Optional().get, throwsA(new isInstanceOf<ArgumentError>()));
     });

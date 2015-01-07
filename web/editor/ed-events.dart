@@ -4,6 +4,8 @@ import 'dart:html';
 import 'dart:async';
 import 'package:polymer/polymer.dart';
 
+import 'visitors.dart';
+
 class EditEvents {
   static void editEventOnFocus(String type, HtmlElement element, PolymerElement sender) {
     //element.onFocus.listen(new EditEventWrapper(type, sender).action);
@@ -15,6 +17,14 @@ class EditEvents {
   
   static void toChildren(PolymerElement parent, Event event, var detail) {
     //parent.childNodes.forEach(printNode);
+    Visitors.visitAll(parent, (PolymerElement parent, Node node) {
+      if (node is EditEventListener) {
+        EditEventListener l=node as EditEventListener;
+        l.onEditEvents(event, detail);
+      }
+    });
+    
+    /*
     parent.shadowRoot.nodes.forEach((e) {
       if (e is EditEventListener) {
         EditEventListener l=e;
@@ -25,11 +35,15 @@ class EditEvents {
         toChildren(pe, event, detail);
       }
     });
+    */
     
+    /*
     parent.childNodes.where((e) => e is EditEventListener).forEach((e) {
       EditEventListener l=e;
       l.onEditEvents(event, detail);
     });
+    * */
+    
 /*    
     var nodes = (parent.shadowRoot.querySelector('content') as ContentElement).getDistributedNodes();
     var myElement = nodes.where((e) => e is EditEventListener).forEach((e) {
