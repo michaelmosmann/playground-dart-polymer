@@ -7,10 +7,12 @@ import 'package:paper_elements/paper_button.dart';
 import 'package:core_elements/core_toolbar.dart';
 import 'ed-events.dart' show EditEvents;
 import 'ed-toolbar.dart' show EdToolbar;
+import 'ed-docs.dart';
 
 @CustomTag('ed-main')
 class Editor extends PolymerElement {
   @observable String title="Editor";
+  @observable EdDoc doc=new EdDoc();
   
   Editor.created() : super.created();
   

@@ -386,7 +386,7 @@ class EdView extends PolymerElement {
 
 @CustomTag('ed-model')
 class EdModel extends TreeComponent {
-  @observable EdDoc doc=new EdDoc();
+  @observable EdDoc doc;//=new EdDoc();
   
   EdModel.created() : super.created();
   

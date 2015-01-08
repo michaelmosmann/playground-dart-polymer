@@ -5,6 +5,7 @@
 <link rel="import" href="packages/paper_elements/paper_button.html">
 <link rel="import" href="ed-model.html">
 <link rel="import" href="ed-toolbar.html">
+<link rel="import" href="ed-render.html">
 
 <polymer-element name="ed-main" on-edit="{{onEditEvent}}">
   <template>
@@ -19,7 +20,8 @@
        <core-icon-button icon="search" on-tap="{{moreAction}}"></core-icon-button>
      </core-toolbar>
      <ed-toolbar id="toolbar"></ed-toolbar>
-     <ed-model></ed-model>
+     <ed-model doc="{{doc}}"></ed-model>
+     <ed-render doc="{{doc}}"></ed-render>
   </template>
   <script type="application/dart" src="ed-main.dart"></script>
 </polymer-element>
