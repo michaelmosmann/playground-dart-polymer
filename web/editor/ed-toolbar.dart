@@ -18,21 +18,48 @@ class EdToolbarHeadline extends TreeComponent {
   EdToolbarHeadline.created() : super.created();
   
   void newHeadline(Event e, var detail, Node target) {
-    print("------------->new headline:");
     TreeEditor source=(parentElement().get() as EdToolbar).lastSource().get();
     fire("edit", detail: {"type" : "headline", "action": "new","source": source});
 
   }
   void newSubHeadline(Event e, var detail, Node target) {
-    print("------------->new sub headline:");
     TreeEditor source=(parentElement().get() as EdToolbar).lastSource().get();
     fire("edit", detail: {"type" : "headline", "action": "newchild","source": source});
 
   }
   void newText(Event e, var detail, Node target) {
-    print("------------->new sub headline:");
     TreeEditor source=(parentElement().get() as EdToolbar).lastSource().get();
     fire("edit", detail: {"type" : "headline", "action": "newtext","source": source});
+
+  }
+  void newTextAfter(Event e, var detail, Node target) {
+    TreeEditor source=(parentElement().get() as EdToolbar).lastSource().get();
+    fire("edit", detail: {"type" : "headline", "action": "newtextafter","source": source});
+
+  }
+}
+
+@CustomTag('ed-toolbar-paragraph')
+class EdParagraphHeadline extends TreeComponent {
+  
+  EdParagraphHeadline.created() : super.created();
+  
+  void newHeadline(Event e, var detail, Node target) {
+    print("------------->new paragraph:");
+    TreeEditor source=(parentElement().get() as EdToolbar).lastSource().get();
+    fire("edit", detail: {"type" : "paragraph", "action": "new","source": source});
+
+  }
+  void newSubHeadline(Event e, var detail, Node target) {
+    print("------------->new sub paragraph:");
+    TreeEditor source=(parentElement().get() as EdToolbar).lastSource().get();
+    fire("edit", detail: {"type" : "paragraph", "action": "newchild","source": source});
+
+  }
+  void newText(Event e, var detail, Node target) {
+    print("------------->new sub paragraph:");
+    TreeEditor source=(parentElement().get() as EdToolbar).lastSource().get();
+    fire("edit", detail: {"type" : "paragraph", "action": "newtext","source": source});
 
   }
 }

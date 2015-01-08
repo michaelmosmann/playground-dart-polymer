@@ -9,6 +9,14 @@
     <paper-button on-click="{{newHeadline}}" style="background-color: #9ade9a;" raisedButton>neues Kapitel</paper-button>
     <paper-button on-click="{{newSubHeadline}}" style="background-color: #9a9ade;" raisedButton>neues Unterkapitel</paper-button>
     <paper-button on-click="{{newText}}" style="background-color: #9a9ade;" raisedButton>neuer Absatz</paper-button>
+    <paper-button on-click="{{newTextAfter}}" style="background-color: #9a9ade;" raisedButton>Kapitelende</paper-button>
+  </template>
+</polymer-element>
+
+<polymer-element name="ed-toolbar-paragraph">
+  <template>
+    <paper-button on-click="{{newHeadline}}" style="background-color: #9ade9a;" raisedButton>neues Kapitel</paper-button>
+    <paper-button on-click="{{newText}}" style="background-color: #9a9ade;" raisedButton>neuer Absatz</paper-button>
   </template>
 </polymer-element>
 
@@ -28,7 +36,9 @@
     <div hidden?={{!headline}}>
       <ed-toolbar-headline></ed-toolbar-headline>
     </div>
-    <div hidden?={{!paragraph}}>Paragraph</div>
+    <div hidden?={{!paragraph}}>
+      <ed-toolbar-paragraph></ed-toolbar-paragraph>
+    </div>
   </template>
   <script type="application/dart" src="ed-toolbar.dart"></script>
 </polymer-element>

@@ -183,6 +183,28 @@ class EditParagraph extends EdEdit {
   void xtextChanged(String oldValue,String newValue) {
     renderContent();
   }
+  
+  void onEditAction(String action) {
+    print("Action: "+action+" on "+this.toString());
+    
+    if (action=='new') {
+      var parentDocNode = doc.findParent(root);
+      if (parentDocNode.isPresent) {
+        parentDocNode.get().add(new EdHeadLine()..title='Kapitel',relativeTo:root);
+      } else {
+        print("Could not find this element in Doc");
+      }
+    }
+    if (action=='newtext') {
+      var parentDocNode = doc.findParent(root);
+      if (parentDocNode.isPresent) {
+        parentDocNode.get().add(new EdParagraph()..text='...',relativeTo:root);
+      } else {
+        print("Could not find this element in Doc");
+      }
+    }
+  }
+
 }
 
 //@CustomTag('ed-paragraph')
@@ -289,6 +311,14 @@ class EditHeadLine extends EdEdit {
     }
     if (action=='newtext') {
       root.nodes.add(new EdParagraph()..text='...');
+    }
+    if (action=='newtextafter') {
+      var parentDocNode = doc.findParent(root);
+      if (parentDocNode.isPresent) {
+        parentDocNode.get().add(new EdParagraph()..text='...',relativeTo:root);
+      } else {
+        print("Could not find this element in Doc");
+      }
     }
   }
 }

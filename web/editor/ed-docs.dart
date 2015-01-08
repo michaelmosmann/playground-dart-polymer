@@ -71,10 +71,10 @@ class EdDoc extends Observable with WithChilds {
       ..title='Bar'
       ..nodes.add(
           new EdParagraph()
-          ..text='Some Text\nfoo'
-          ..nodes.add(
-              new EdHeadLine()
-              ..title='Sub'
-              )
-          )]);
+          ..text='Some Text\nfoo')
+      ..nodes.add(
+            new EdHeadLine()
+            ..title='Sub'
+            )
+      ]);
 }
