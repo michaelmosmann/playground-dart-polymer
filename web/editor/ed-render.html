@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <link rel="import" href="packages/polymer/polymer.html">
 
-<polymer-element name="ed-render-node" attributes="root,level">
+<polymer-element name="ed-render-paragraph" attributes="xtext">
   <template>
-    <template if="{{ root.type == 'headline' }}">{{level}}:{{root.title}}<br/></template>
-    <template if="{{ root.type == 'paragraph' }}">{{root.text}}<br/></template>
-    <template repeat="{{node in root.nodes}}">
-      <div style="margin-left:10px; border:1px dotted black;">
-        <ed-render-node root="{{node}}" level="{{level + 1}}"></ed-render-node>
-      </div>
+    <p id="p">NIX</p>
+  </template>
+</polymer-element>
+
+<polymer-element name="ed-render-node" attributes="root,level,idx">
+  <template>
+    <template if="{{ root.type == 'headline' }}">
+      <h1>{{idx + 1}} - {{level}}:{{root.title}}</h1>
+      <template repeat="{{node in root.nodes}}">
+        <div style="margin-left:10px; border:1px dotted black;">
+          <ed-render-node root="{{node}}" idx="{{idx}}" level="{{level + 1}}"></ed-render-node>
+        </div>
+      </template>
+    </template>
+    <template if="{{ root.type == 'paragraph' }}">
+      <ed-render-paragraph xtext="{{root.text}}"></ed-render-paragraph>
+      <template repeat="{{node in root.nodes}}">
+        <div style="margin-left:10px; border:1px dotted black;">
+          <ed-render-node root="{{node}}" idx="{{idx}}" level="{{level + 1}}"></ed-render-node>
+        </div>
+      </template>
     </template>
   </template>
 </polymer-element>
 
 <polymer-element name="ed-render-root" attributes="root,mode">
   <template>
-    <div style="background-color: grey;">
+    <div>
       <template repeat="{{node in root.nodes}}">
-        <ed-render-node root="{{node}}" level="1"></ed-render-node>
+        <ed-render-node root="{{node}}" idx="0" level="1"></ed-render-node>
       </template>
     </div>
   </template>
@@ -32,7 +47,8 @@
         padding: 4px;
       }
     </style>
-    <div>{{doc.title}}</div>
+    <H1>{{doc.title}}</H1>
+    <hr>
     <ed-render-root root="{{doc}}"></ed-render-root>
   </template>
   <script type="application/dart" src="ed-render.dart"></script>
