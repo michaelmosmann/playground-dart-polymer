@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <link rel="import" href="packages/polymer/polymer.html">
 <link rel="import" href="packages/core_elements/core_toolbar.html">
+<link rel="import" href="packages/core_elements/core_header_panel.html">
 <link rel="import" href="packages/core_elements/core_icon_button.html">
 <link rel="import" href="packages/paper_elements/paper_button.html">
+<link rel="import" href="packages/paper_elements/paper_icon_button.html">
+<link rel="import" href="packages/paper_elements/paper_tabs.html">
 <link rel="import" href="ed-model.html">
 <link rel="import" href="ed-toolbar.html">
 <link rel="import" href="ed-render.html">
@@ -11,17 +14,39 @@
   <template>
     <style>
       :host {
-        background-color: #fcfcf8;
+        /*background-color: #fcfcf8;*/
       }
     </style>
-    <core-toolbar>
+    <!--
+    <core-header-panel horizontal flex class="medium-tall"  style="height: 20px">
+    </core-header-panel>
+    -->
+    <core-toolbar waterfall>
+    <!--
        <core-icon-button icon="menu" on-tap="{{menuAction}}"></core-icon-button>
        <div flex>{{title}}</div>
        <core-icon-button icon="search" on-tap="{{moreAction}}"></core-icon-button>
+       -->
+      <paper-icon-button icon="menu" on-tap="{{menuAction}}" ></paper-icon-button>
+      <div flex>{{title}}</div>
+      <paper-icon-button icon="more-vert" on-tap="{{moreAction}}"></paper-icon-button>
+
+<!--
+      <paper-tabs class="bottom fit" selected="0">
+        <paper-tab>ONE</paper-tab>
+        <paper-tab>TWO</paper-tab>
+      </paper-tabs>
+ -->
      </core-toolbar>
-     <ed-toolbar id="toolbar"></ed-toolbar>
-     <ed-model doc="{{doc}}"></ed-model>
-     <ed-render doc="{{doc}}"></ed-render>
+     <div horizontal layout>
+      <div flex>
+        <ed-toolbar id="toolbar"></ed-toolbar>
+        <ed-model doc="{{doc}}"></ed-model>
+      </div>
+      <div flex>
+        <ed-render doc="{{doc}}"></ed-render>
+      </div>
+    </div>
   </template>
   <script type="application/dart" src="ed-main.dart"></script>
 </polymer-element>

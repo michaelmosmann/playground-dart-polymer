@@ -297,7 +297,7 @@ class EditHeadLine extends EdEdit {
   
   void onEditAction(String action) {
     print("Action: "+action+" on "+this.toString());
-    
+
     if (action=='new') {
       var parentDocNode = doc.findParent(root);
       if (parentDocNode.isPresent) {

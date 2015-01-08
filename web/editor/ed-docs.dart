@@ -32,7 +32,6 @@ abstract class WithChilds {
       nodes.add(node);
     }
   }
-  
 }
 
 abstract class EdNode extends Observable {
@@ -47,12 +46,21 @@ abstract class EdNodeWithChilds extends EdNode with WithChilds {
   @observable List<EdNode> nodes=toObservable([]);
 
   EdNodeWithChilds(String type) : super(type);  
+  
+  String toString() {
+    return "EdNodeWithChilds(${nodes.toString()})";
+  }
 }
 
 class EdHeadLine extends EdNodeWithChilds {
   @observable String title="Headline";
 
   EdHeadLine() : super("headline");
+  
+  String toString() {
+    return "EdHeadLine(${title})";
+  }
+
 }
 
 class EdParagraph extends EdNodeWithChilds {
@@ -66,15 +74,15 @@ class EdDoc extends Observable with WithChilds {
   
   @observable List<EdNode> nodes=toObservable([
     new EdHeadLine()
-      ..title='Foo', 
+      ..title='Start', 
     new EdHeadLine()
-      ..title='Bar'
+      ..title='Hilfe'
       ..nodes.add(
           new EdParagraph()
-          ..text='Some Text\nfoo')
+          ..text='Etwas Text mit Zeilenumbruch.\nUnd einer zweiten Zeile.')
       ..nodes.add(
             new EdHeadLine()
-            ..title='Sub'
+            ..title='Beispiel'
             )
       ]);
 }
