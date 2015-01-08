@@ -47,7 +47,8 @@ class RenderNodes extends PolymerElement {
   @observable int numberOfType=-1;
   
   RenderNodes.created() : super.created();
-  
+
+  /*
   void attached() {
     changes.listen((List<ChangeRecord> changes) {
       print("-----------------------");
@@ -58,10 +59,12 @@ class RenderNodes extends PolymerElement {
       print("-----------------------");
     });
   }
+  * 
+   */
 }
 
 @CustomTag('ed-render-node')
-class RenderNode extends PolymerElement {
+class RenderNode extends PolymerElement implements EditEventListener {
   @observable WithChilds p;
   @observable EdNode root;
   @observable int level;
@@ -77,7 +80,7 @@ class RenderNode extends PolymerElement {
             if (c is PropertyChangeRecord) {
               if (c.name==new Symbol('root') || c.name==new Symbol('p')) {
                 //print("Change calc numberOfType");
-                numberOfType=_numberOfType();
+                _updateNumberOfType();
               } else {
                 print("Skip Change(wrong prop) "+c.toString());
               }
@@ -87,11 +90,16 @@ class RenderNode extends PolymerElement {
           }
         });
   }
+  
+  void _updateNumberOfType() {
+    numberOfType=_numberOfType();
+  }
+  
   int _numberOfType() {
     int ret=0;
     if (p!=null) {
-      print("----------------------");
-      print(" "+root.toString()+" in "+p.toString());
+      //print("----------------------");
+      //print(" "+root.toString()+" in "+p.toString());
       for (EdNode n in p.nodes) {
         //print(" "+n.runtimeType.toString()+"?"+root.runtimeType.toString());
         if (identical(n, root)) {
@@ -101,10 +109,15 @@ class RenderNode extends PolymerElement {
           ret++;
         }
       }
-      print(" "+root.toString()+"="+ret.toString());
-      print("----------------------");
+      //print(" "+root.toString()+"="+ret.toString());
+      //print("----------------------");
     }
     return ret;
+  }
+
+  @override
+  void onEditEvents(Event e, detail) {
+    _updateNumberOfType();
   }
 }
 
