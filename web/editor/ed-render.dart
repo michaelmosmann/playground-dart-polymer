@@ -25,10 +25,10 @@ class RenderParagraph extends PolymerElement {
     
     changes.listen((List<ChangeRecord> changes) {
       for (ChangeRecord c in changes) {
-        print("Change "+c.toString());
+        //print("Change "+c.toString());
         if (c is PropertyChangeRecord) {
           if (c.name==new Symbol('xtext')) {
-            print("Text changed to "+xtext);
+            //print("Text changed to "+xtext);
             _para.innerHtml=xtext.replaceAll('\n', "<br>");
           }
         }
@@ -40,11 +40,42 @@ class RenderParagraph extends PolymerElement {
 
 @CustomTag('ed-render-node')
 class RenderNode extends PolymerElement {
+  @observable WithChilds p;
   @observable EdNode root;
   @observable int level;
-  @observable int idx;
+  @observable String idx;
+  @observable int numberOfType=-1;
   
   RenderNode.created() : super.created();
+  
+  void attached() {
+    changes.listen((List<ChangeRecord> changes) {
+          for (ChangeRecord c in changes) {
+            //print("Change "+c.toString());
+            if (c is PropertyChangeRecord) {
+              if (c.name==new Symbol('root') || c.name==new Symbol('p')) {
+                //print("Change calc numberOfType");
+                numberOfType=_numberOfType();
+              }
+            }
+          }
+        });
+  }
+  int _numberOfType() {
+    int ret=0;
+    if (p!=null) {
+      for (EdNode n in p.nodes) {
+        //print(" "+n.runtimeType.toString()+"?"+root.runtimeType.toString());
+        if (identical(n, root)) {
+          break;
+        }
+        if (n.runtimeType==root.runtimeType) {
+          ret++;
+        }
+      }
+    }
+    return ret;
+  }
 }
 
 @CustomTag('ed-render-root')

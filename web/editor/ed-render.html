@@ -7,23 +7,18 @@
   </template>
 </polymer-element>
 
-<polymer-element name="ed-render-node" attributes="root,level,idx">
+<polymer-element name="ed-render-node" attributes="p,root,level,idx">
   <template>
     <template if="{{ root.type == 'headline' }}">
-      <h1>{{idx + 1}} - {{level}}:{{root.title}}</h1>
-      <template repeat="{{node in root.nodes}}">
-        <div style="margin-left:10px; border:1px dotted black;">
-          <ed-render-node root="{{node}}" idx="{{idx}}" level="{{level + 1}}"></ed-render-node>
-        </div>
-      </template>
+      <h1>{{idx}}{{numberOfType + 1}} {{root.title}}</h1>
     </template>
     <template if="{{ root.type == 'paragraph' }}">
       <ed-render-paragraph xtext="{{root.text}}"></ed-render-paragraph>
-      <template repeat="{{node in root.nodes}}">
-        <div style="margin-left:10px; border:1px dotted black;">
-          <ed-render-node root="{{node}}" idx="{{idx}}" level="{{level + 1}}"></ed-render-node>
-        </div>
-      </template>
+    </template>
+    <template repeat="{{node in root.nodes}}">
+      <div style="margin-left:10px; border:1px dotted black;">
+        <ed-render-node root="{{node}}" p="{{root}}" idx="{{(numberOfType + 1).toString()+'.'}}" level="{{level + 1}}"></ed-render-node>
+      </div>
     </template>
   </template>
 </polymer-element>
@@ -32,7 +27,7 @@
   <template>
     <div>
       <template repeat="{{node in root.nodes}}">
-        <ed-render-node root="{{node}}" idx="0" level="1"></ed-render-node>
+        <ed-render-node root="{{node}}" p="{{root}}" idx="" level="1"></ed-render-node>
       </template>
     </div>
   </template>
