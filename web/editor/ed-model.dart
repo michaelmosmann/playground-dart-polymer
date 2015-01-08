@@ -13,10 +13,6 @@ import 'treecomponent.dart';
 import 'optionals.dart';
 import 'ed-types.dart';
 
-abstract class _TreeDataContainer<T> {
-  T data();
-}
-
 abstract class EdEdit extends TreeComponent implements TreeEditor,EditEventListener {
   
   String editorType;
@@ -154,7 +150,8 @@ abstract class EdEdit extends TreeComponent implements TreeEditor,EditEventListe
 
 @CustomTag('ed-paragraph')
 class EditParagraph extends EdEdit {
-  @observable EdNode doc;
+  @observable EdDoc doc;
+  @observable EdNode root;
   @published String xtext;
 
   EditParagraph.created() : super.created("paragraph", "p");
@@ -245,7 +242,8 @@ class EdEditParagraph extends PolymerElement {
 
 @CustomTag('ed-headline')
 class EditHeadLine extends EdEdit {
-  @observable EdNode doc;
+  @observable EdDoc doc;
+  @observable EdNodeWithChilds root;
   @observable String xtitle;
   @observable int level;
   
@@ -278,21 +276,17 @@ class EditHeadLine extends EdEdit {
   void onEditAction(String action) {
     print("Action: "+action+" on "+this.toString());
     
-    var currentParent = parentElement().get();
-    if (currentParent is _TreeDataContainer) {
-      print("Action on parent: "+currentParent.toString()+" with "+doc.toString());
-      var data=currentParent.data();
-      if (data is EdNodeWithChilds) {
-        EdNodeWithChilds node=data;
-        int idx=node.nodes.indexOf(doc);
-        if (idx==-1) {
-          //node.nodes.add(new EdHeadLine()..title='neu');
-        } else {
-          //node.nodes.insert(idx+1, new EdHeadLine()..title='neu');
-        }
+    if (action=='new') {
+      var parentDocNode = doc.findParent(root);
+      if (parentDocNode.isPresent) {
+        parentDocNode.get().add(new EdHeadLine()..title='neu',relativeTo:root);
+      } else {
+        print("Could not find this element in Doc");
       }
     }
-    //parentElement()
+    if (action=='newchild') {
+      root.nodes.add(new EdHeadLine()..title='sub');
+    }
   }
 }
 
@@ -331,29 +325,21 @@ class EdEditHeadLine extends PolymerElement {
 */
 
 @CustomTag('ed-root')
-class EdRoot extends TreeComponent implements _TreeDataContainer<EdDoc> {
+class EdRoot extends TreeComponent {
   @observable EdDoc root;
   @published String mode;
   
   EdRoot.created() : super.created();
 
-  @override
-  EdDoc data() {
-    return root;
-  }
 }
 
 @CustomTag('ed-nodes')
-class EdNodes extends TreeComponent implements _TreeDataContainer<EdNode> {
+class EdNodes extends TreeComponent {
+  @observable EdDoc doc;
   @observable EdNode root;
   @observable int level;
   
   EdNodes.created() : super.created();
-  
-  @override
-  EdNode data() {
-    return root;
-  }
 
 }
 
@@ -366,7 +352,7 @@ class EdView extends PolymerElement {
 }
 
 @CustomTag('ed-model')
-class EdModel extends TreeComponent implements _TreeDataContainer<EdDoc> {
+class EdModel extends TreeComponent {
   @observable EdDoc doc=new EdDoc();
   
   EdModel.created() : super.created();
@@ -375,8 +361,4 @@ class EdModel extends TreeComponent implements _TreeDataContainer<EdDoc> {
     doc.title="Clicked";
   }
   
-  @override
-  EdDoc data() {
-    return doc;
-  }
 }

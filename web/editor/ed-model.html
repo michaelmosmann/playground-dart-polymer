@@ -1,32 +1,32 @@
 <!DOCTYPE html>
 <link rel="import" href="packages/polymer/polymer.html">
 
-<polymer-element name="ed-headline" attributes="xtitle,level">
+<polymer-element name="ed-headline" attributes="doc,root,xtitle,level">
   <template>
-    <template if="{{level < 1}}"><h1 id="h">???{{xtitle}}???</h1></template>
-    <template if="{{level == 1}}"><h1 id="h">{{xtitle}}</h1></template>
-    <template if="{{level == 2}}"><h2 id="h">{{xtitle}}</h2></template>
-    <template if="{{level == 3}}"><h3 id="h">{{xtitle}}</h3></template>
-    <template if="{{level == 4}}"><h4 id="h">{{xtitle}}</h4></template>
-    <template if="{{level == 5}}"><h5 id="h">{{xtitle}}</h5></template>
-    <template if="{{level == 6}}"><h6 id="h">{{xtitle}}</h6></template>
-    <template if="{{level > 6}}"><h6 id="h">???{{xtitle}}???</h6></template>
+    <template if="{{level < 1}}"><h1><span id="h">???{{xtitle}}???</span></h1></template>
+    <template if="{{level == 1}}"><h1><span id="h">{{xtitle}}</span></h1></template>
+    <template if="{{level == 2}}"><h2><span id="h">{{xtitle}}</span></h2></template>
+    <template if="{{level == 3}}"><h3><span id="h">{{xtitle}}</span></h3></template>
+    <template if="{{level == 4}}"><h4><span id="h">{{xtitle}}</span></h4></template>
+    <template if="{{level == 5}}"><h5><span id="h">{{xtitle}}</span></h5></template>
+    <template if="{{level == 6}}"><h6><span id="h">{{xtitle}}</span></h6></template>
+    <template if="{{level > 6}}"><h6><span id="h">???{{xtitle}}???</span></h6></template>
   </template>
 </polymer-element>
 
-<polymer-element name="ed-paragraph" attributes="xtext">
+<polymer-element name="ed-paragraph" attributes="doc,root,xtext">
   <template>
     <p id="p"></p>
   </template>
 </polymer-element>
 
-<polymer-element name="ed-nodes" attributes="root,level">
+<polymer-element name="ed-nodes" attributes="doc,root,level">
   <template>
-    <template if="{{ root.type == 'headline' }}"><ed-headline doc="{{root}}" xtitle="{{root.title}}" level={{level}}></ed-headline></template>
-    <template if="{{ root.type == 'paragraph' }}"><ed-paragraph doc="{{root}}" xtext="{{root.text}}"></ed-paragraph></template>
+    <template if="{{ root.type == 'headline' }}"><ed-headline doc="{{doc}}" root="{{root}}" xtitle="{{root.title}}" level={{level}}></ed-headline></template>
+    <template if="{{ root.type == 'paragraph' }}"><ed-paragraph doc="{{doc}}" root="{{root}}" xtext="{{root.text}}"></ed-paragraph></template>
     <template repeat="{{node in root.nodes}}">
       <div style="margin-left:10px;">
-        <ed-nodes root="{{node}}" level="{{level + 1}}"></ed-nodes>
+        <ed-nodes doc="{{doc}}" root="{{node}}" level="{{level + 1}}"></ed-nodes>
       </div>
     </template>
   </template>
@@ -48,7 +48,7 @@
   <template>
     <template if="{{mode=='edit'}}">
       <template repeat="{{node in root.nodes}}">
-        <ed-nodes root="{{node}}" level="1"></ed-nodes>
+        <ed-nodes doc="{{root}}" root="{{node}}" level="1"></ed-nodes>
       </template>
     </template>
     <template if="{{mode!='edit'}}">

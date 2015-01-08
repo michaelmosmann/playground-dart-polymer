@@ -23,6 +23,12 @@ class EdToolbarHeadline extends TreeComponent {
     fire("edit", detail: {"type" : "headline", "action": "new","source": source});
 
   }
+  void newSubHeadline(Event e, var detail, Node target) {
+    print("------------->new sub headline:");
+    TreeEditor source=(parentElement().get() as EdToolbar).lastSource().get();
+    fire("edit", detail: {"type" : "headline", "action": "newchild","source": source});
+
+  }
 }
 
 @CustomTag('ed-toolbar')
