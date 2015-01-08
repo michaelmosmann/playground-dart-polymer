@@ -6,8 +6,9 @@
 
 <polymer-element name="ed-toolbar-headline">
   <template>
-    <paper-button on-click="{{newHeadline}}" style="background-color: #9ade9a;" raisedButton>+Headline</paper-button>
-    <paper-button on-click="{{newSubHeadline}}" style="background-color: #9ade9a;" raisedButton>+>Headline</paper-button>
+    <paper-button on-click="{{newHeadline}}" style="background-color: #9ade9a;" raisedButton>neues Kapitel</paper-button>
+    <paper-button on-click="{{newSubHeadline}}" style="background-color: #9a9ade;" raisedButton>neues Unterkapitel</paper-button>
+    <paper-button on-click="{{newText}}" style="background-color: #9a9ade;" raisedButton>neuer Absatz</paper-button>
   </template>
 </polymer-element>
 
@@ -20,8 +21,10 @@
         padding: 4px;
       }
     </style>
+    <!--
     <div hidden?={{hideA}}>A</div>
     <div hidden?={{hideB}}>B</div>
+    -->
     <div hidden?={{!headline}}>
       <ed-toolbar-headline></ed-toolbar-headline>
     </div>

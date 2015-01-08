@@ -65,7 +65,7 @@
   <template>
     <style>
       :host {
-        background-color: #f88080;
+        background-color: white;
         display: block;
         padding: 4px;
       }
@@ -73,7 +73,9 @@
     <div id="start" on-click="{{clicked}}" >{{doc.title}}</div>
     
     <ed-root root="{{doc}}" mode="edit"></ed-root>
+    <!--
     <ed-root root="{{doc}}"></ed-root>
+    -->
   </template>
   <script type="application/dart" src="ed-model.dart"></script>
 </polymer-element>

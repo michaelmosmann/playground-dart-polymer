@@ -279,13 +279,16 @@ class EditHeadLine extends EdEdit {
     if (action=='new') {
       var parentDocNode = doc.findParent(root);
       if (parentDocNode.isPresent) {
-        parentDocNode.get().add(new EdHeadLine()..title='neu',relativeTo:root);
+        parentDocNode.get().add(new EdHeadLine()..title='Kapitel',relativeTo:root);
       } else {
         print("Could not find this element in Doc");
       }
     }
     if (action=='newchild') {
-      root.nodes.add(new EdHeadLine()..title='sub');
+      root.nodes.add(new EdHeadLine()..title='Unterkapitel');
+    }
+    if (action=='newtext') {
+      root.nodes.add(new EdParagraph()..text='...');
     }
   }
 }
