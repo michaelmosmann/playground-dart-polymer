@@ -16,9 +16,9 @@
       }
     </style>
     <p>{{counter}}.</p>
-    <paper-button on-click="{{start}}" id="startButton" style="background-color: #9ade9a;" raisedButton label="Start"></paper-button>
-    <paper-button on-click="{{stop}}" id="stopButton" style="background-color: #dc6186;" raisedButton label="Stop"></paper-button>
-    <paper-button on-click="{{reset}}" id="resetButton" style="background-color: #617edc;" raisedButton label="Reset"></paper-button>
+    <paper-button on-click="{{start}}" id="startButton" style="background-color: #9ade9a;" raisedButton label="Start">Start</paper-button>
+    <paper-button on-click="{{stop}}" id="stopButton" style="background-color: #dc6186;" raisedButton label="Stop">Stop</paper-button>
+    <paper-button on-click="{{reset}}" id="resetButton" style="background-color: #617edc;" raisedButton label="Reset">Reset</paper-button>
     <p>Speed: {{data['inc']}}</p>
     <paper-slider id="range" value="{{data['inc']}}"></paper-slider>
   </template>

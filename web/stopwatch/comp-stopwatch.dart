@@ -29,7 +29,7 @@ class CompStopWatch extends PolymerElement {
     stopButton = $['stopButton'];
     resetButton = $['resetButton'];
     
-    startButton.raisedButton=true;
+    //startButton.raisedButton=true;
     
     stopButton.disabled = true;
     resetButton.disabled = true;
